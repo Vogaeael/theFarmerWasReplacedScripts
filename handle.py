@@ -1,13 +1,13 @@
 import entityGrid
 
-def water():
+def water() -> None:
     if 0 == get_water():
         use_item(Items.Water)
 
-def fertilize():
+def fertilize() -> None:
     use_item(Items.Fertilizer)
 
-def handle(entity, farmSeparate: bool):
+def handle(entity, farmSeparate: bool) -> None:
     if entity["water"]:
         water()
 

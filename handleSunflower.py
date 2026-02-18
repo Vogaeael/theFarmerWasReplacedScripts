@@ -1,6 +1,6 @@
 import moveTo
 
-def farmIt(sortedField):
+def farmIt(sortedField: dict[int, list[int, list[str, Entity]]]) -> None:
     lastHighest = 99
     keys = []
     for i in range(len(sortedField)):
@@ -16,7 +16,7 @@ def farmIt(sortedField):
             moveTo.position(pos["y"], pos["x"])
             harvest()
 
-def replant(sunflowerField):
+def replant(sunflowerField: dict[int, list[int, list[str, Entity]]]) -> None:
     for x in sunflowerField:
         for y in sunflowerField[x]:
             moveTo.position(y, x)
@@ -24,7 +24,7 @@ def replant(sunflowerField):
                 till()
             plant(Entities.Sunflower)
 
-def determineFlowerSizes(sunflowerField):
+def determineFlowerSizes(sunflowerField: dict[int, list[int, list[str, Entity]]]) -> dict[int, dict[str, int]]:
     sortedField = {}
     for x in sunflowerField:
         for y in sunflowerField[x]:
@@ -37,7 +37,7 @@ def determineFlowerSizes(sunflowerField):
     return sortedField
 
 
-def handleSunflowerField(sunflowerField):
+def handleSunflowerField(sunflowerField: dict[int, list[int, list[str, Entity]]]) -> None:
     # getfield
     sortedField = determineFlowerSizes(sunflowerField)
 

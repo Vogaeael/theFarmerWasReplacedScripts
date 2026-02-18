@@ -1,4 +1,4 @@
-def items():
+def items() -> dict[Item, Entity]:
     return {
         Items.Cactus: Entities.Cactus,
         Items.Wood: Entities.Bush,
@@ -8,7 +8,7 @@ def items():
         Items.Power: Entities.Sunflower,
     }
 
-def grounds():
+def grounds() -> dict[Entity, Ground]:
     return {
         Entities.Cactus: Grounds.Soil,
         Entities.Bush: Grounds.Grassland,

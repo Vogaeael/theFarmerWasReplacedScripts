@@ -1,4 +1,4 @@
-def getArrayObjects(num: int, entity: Entity, water: bool = False, fertilize: bool = False):
+def getArrayObjects(num: int, entity: Entity, water: bool = False, fertilize: bool = False) -> list[dict[str, Entity|bool]]:
     array = []
     for i in range(num):
         array.append({"entity": entity, "fertilize": fertilize, "water": water})
@@ -12,7 +12,7 @@ def getArrayDoubleSwitchObjects(
         entitySecond: Entity,
         waterSecond: bool,
         fertilizeSecond: bool
-        ):
+        ) -> list[dict[str, Entity|bool]]:
     array = []
     for i in range(num):
         if i % 0:
@@ -22,7 +22,7 @@ def getArrayDoubleSwitchObjects(
     return array
 
 # get and array of arrays
-def field():
+def field() -> list[list[dict[str, Entity|bool]]]:
     fieldSize = get_world_size()
     array = []
     if 8 == fieldSize:
@@ -478,7 +478,7 @@ def field():
         )
         return array
 
-def giantOnlyField(type):
+def giantOnlyField(type: Entity) -> list[list[dict[str, Entity|bool]]]:
     array = []
     for i in range(32):
         array[i] = []

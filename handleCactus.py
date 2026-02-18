@@ -1,13 +1,13 @@
 import moveTo
 
-def farmIt(cactusField):
+def farmIt(cactusField: dict[int, list[int, list[str, Entity]]]) -> None:
     for x in cactusField:
         for y in cactusField[x]:
             moveTo.position(y, x)
             harvest()
             return
 
-def replant(cactusField):
+def replant(cactusField: dict[int, list[int, list[str, Entity]]]) -> None:
     for x in cactusField:
         for y in cactusField[x]:
             moveTo.position(y, x)
@@ -15,7 +15,9 @@ def replant(cactusField):
                 till()
             plant(Entities.Cactus)
 
-def sort(cactusField, falseOrder):
+def sort(
+        cactusField: dict[int, list[int, list[str, Entity]]],
+        falseOrder: bool) -> None:
     didSwap = True
     while didSwap:
         didSwap = False
@@ -61,7 +63,10 @@ def sort(cactusField, falseOrder):
                     
 
 
-def handleCactusField(cactusField, falseOrder = False):
+def handleCactusField(
+        cactusField: dict[int, list[int, list[str, Entity]]],
+        falseOrder = False
+        ) -> None:
     sort(cactusField, falseOrder)
 
     # farm the one

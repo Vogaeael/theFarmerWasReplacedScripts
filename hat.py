@@ -1,4 +1,4 @@
-def getUnlockedHatList():
+def getUnlockedHatList() -> None:
     return [
         Hats.Brown_Hat,
         Hats.Carrot_Hat,
@@ -12,7 +12,7 @@ def getUnlockedHatList():
         #Hats.Dinosaur_Hat,
     ]
 
-def randomHat():
+def randomHat() -> None:
     unlockedHats = getUnlockedHatList()
     index = random() * len(unlockedHats) // 1
     change_hat(unlockedHats[index])

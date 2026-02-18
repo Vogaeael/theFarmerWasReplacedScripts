@@ -1,4 +1,4 @@
-def position(X, Y):
+def position(X: int, Y: int) -> None:
     max_value = get_world_size()
     
     # determine steps north and south
@@ -41,5 +41,5 @@ def position(X, Y):
         for i in range(westSteps):
             move(West)
 
-def start():
+def start() -> None:
     position(0,0)

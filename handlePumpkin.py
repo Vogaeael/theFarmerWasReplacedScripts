@@ -1,14 +1,14 @@
 import moveTo
 import handle
 
-def farmIt(pumpkinField):
+def farmIt(pumpkinField: dict[int, list[int, list[str, Entity]]]) -> None:
     for x in pumpkinField:
         for y in pumpkinField[x]:
             moveTo.position(y, x)
             harvest()
             return
 
-def replant(pumpkinField):
+def replant(pumpkinField: dict[int, list[int, list[str, Entity]]]) -> None:
     newField = {}
     for x in pumpkinField:
         for y in pumpkinField[x]:
@@ -27,7 +27,7 @@ def replant(pumpkinField):
                 newField[x].append(y)
     return newField
 
-def handlePumpkinField(pumpkinField):
+def handlePumpkinField(pumpkinField: dict[int, list[int, list[str, Entity]]]) -> None:
     replanted = {}
     # check all pumpkins and replant them (until all are not dead and farmable)
     field = replant(pumpkinField)

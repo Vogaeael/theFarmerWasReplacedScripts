@@ -21,7 +21,6 @@ farmSeparate = {
     Entities.Sunflower: True,
 }
 moveTo.position(7, 7)
-clear()
 
 while 1:
     hat.randomHat()
