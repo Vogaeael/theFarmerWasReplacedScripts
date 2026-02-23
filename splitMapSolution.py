@@ -26,8 +26,8 @@ def run() -> None:
     while 1:
         hat.randomHat()
         
-        for i in range(get_world_size()):
-            for j in range(get_world_size()):
+        for _ in range(get_world_size()):
+            for _ in range(get_world_size()):
                 type = currentField[get_pos_y()][get_pos_x()]
                 handle.handle(type, farmSeparate)
                 move(East)

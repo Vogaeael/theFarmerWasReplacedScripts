@@ -15,10 +15,10 @@ def position(X: int, Y: int) -> None:
     
     # go steps north or south
     if northSteps < southSteps:
-        for i in range(northSteps):
+        for _ in range(northSteps):
             move(North)
     else:
-        for i in range(southSteps):
+        for _ in range(southSteps):
             move(South)
     
     # determine steps east and west
@@ -35,10 +35,10 @@ def position(X: int, Y: int) -> None:
     
     # go steps east or west
     if eastSteps < westSteps:
-        for i in range(eastSteps):
+        for _ in range(eastSteps):
             move(East)
     else:
-        for i in range(westSteps):
+        for _ in range(westSteps):
             move(West)
 
 def start() -> None:

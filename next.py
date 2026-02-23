@@ -11,7 +11,7 @@ def needs(entity: Entity) -> Entity:
 def next() -> Entity:
     entities = {
         Entities.Grass: {
-            "min": 19700000,    # 19.7M
+            "min": 30000000,    # 30M
             "item": Items.Hay,
         },
         Entities.Tree: {
@@ -27,7 +27,7 @@ def next() -> Entity:
             "item": Items.Pumpkin,
         },
         Entities.Cactus: {
-            "min": 15600000,    # 15.6M
+            "min": 30000000,    # 30M
             "item": Items.Cactus,
         },
         Entities.Sunflower: {
@@ -35,7 +35,7 @@ def next() -> Entity:
             "item": Items.Power,
         },
         Entities.Treasure: {
-            "min": 5000,    # 5K
+            "min": 50000,    # 50K
             "item": Items.Gold,
         },
 #        Entities.Dinosaur: {

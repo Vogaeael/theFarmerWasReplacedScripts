@@ -5,7 +5,7 @@ import plantEntity
 def farmIt(sortedField: dict[int, list[int, list[str, Entity]]]) -> None:
     lastHighest = 99
     keys = []
-    for i in range(len(sortedField)):
+    for _ in range(len(sortedField)):
         highest = -1
         for key in sortedField:
             if key > highest and key < lastHighest:
