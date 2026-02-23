@@ -10,48 +10,63 @@ def farmIt(cactusField: Any) -> None:      # cactusField: field2.FieldList
             return
 
 def sort(cactusField: Any, falseOrder: bool) -> None:      # cactusField: field2.FieldList
-    didSwap = True
-    while didSwap:
-        didSwap = False
+    didSwapInField = True
+    howManyLinesToSkipAtEnd = 0
+    howManyLinesNotSwapAtEnd = 0
+    while didSwapInField:
+        didSwapInField = False
+        i = 0
         for x in cactusField:
-            for y in cactusField[x]:
-                moveTo.position(y, x)
-                if (x + 1) in cactusField and y in cactusField[x + 1]:
-                    currentSize = measure()
-                    northSize = measure(North)
-                    if northSize < currentSize and not falseOrder:
-                        swap(North)
-                        didSwap = True
-                    elif northSize > currentSize and falseOrder:
-                        swap(North)
-                        didSwap = True
-                if (x - 1) in cactusField and y in cactusField[x - 1]:
-                    currentSize = measure()
-                    southSize = measure(South)
-                    if southSize > currentSize and not falseOrder:
-                        swap(South)
-                        didSwap = True
-                    elif southSize < currentSize and falseOrder:
-                        swap(South)
-                        didSwap = True
-                if (y + 1) in cactusField[x]:
-                    currentSize = measure()
-                    eastSize = measure(East)
-                    if eastSize < currentSize and not falseOrder:
-                        swap(East)
-                        didSwap = True
-                    elif eastSize > currentSize and falseOrder:
-                        swap(East)
-                        didSwap = True
-                if (y - 1) in cactusField[x]:
-                    currentSize = measure()
-                    westSize = measure(West)
-                    if westSize > currentSize and not falseOrder:
-                        swap(West)
-                        didSwap = True
-                    if westSize < currentSize and falseOrder:
-                        swap(West)
-                        didSwap = True
+            i = i + 1
+            if i <= len(cactusField) - howManyLinesToSkipAtEnd:
+                howManyLinesNotSwapAtEnd = howManyLinesNotSwapAtEnd + 1
+                for y in cactusField[x]:
+                    moveTo.position(y, x)
+                    if (x + 1) in cactusField and y in cactusField[x + 1]:
+                        currentSize = measure()
+                        northSize = measure(North)
+                        if northSize < currentSize and not falseOrder:
+                            swap(North)
+                            didSwapInField = True
+                            howManyLinesNotSwapAtEnd = 0
+                        elif northSize > currentSize and falseOrder:
+                            swap(North)
+                            didSwapInField = True
+                            howManyLinesNotSwapAtEnd = 0
+                    if (x - 1) in cactusField and y in cactusField[x - 1]:
+                        currentSize = measure()
+                        southSize = measure(South)
+                        if southSize > currentSize and not falseOrder:
+                            swap(South)
+                            didSwapInField = True
+                            howManyLinesNotSwapAtEnd = 0
+                        elif southSize < currentSize and falseOrder:
+                            swap(South)
+                            didSwapInField = True
+                            howManyLinesNotSwapAtEnd = 0
+                    if (y + 1) in cactusField[x]:
+                        currentSize = measure()
+                        eastSize = measure(East)
+                        if eastSize < currentSize and not falseOrder:
+                            swap(East)
+                            didSwapInField = True
+                            howManyLinesNotSwapAtEnd = 0
+                        elif eastSize > currentSize and falseOrder:
+                            swap(East)
+                            didSwapInField = True
+                            howManyLinesNotSwapAtEnd = 0
+                    if (y - 1) in cactusField[x]:
+                        currentSize = measure()
+                        westSize = measure(West)
+                        if westSize > currentSize and not falseOrder:
+                            swap(West)
+                            didSwapInField = True
+                            howManyLinesNotSwapAtEnd = 0
+                        if westSize < currentSize and falseOrder:
+                            swap(West)
+                            didSwapInField = True
+                            howManyLinesNotSwapAtEnd = 0
+        howManyLinesToSkipAtEnd = howManyLinesToSkipAtEnd + howManyLinesNotSwapAtEnd
 
 def handleCactusField(cactusField: Any, falseOrder = False) -> None:       # cactusField: field2.FieldList
     sort(cactusField, falseOrder)
