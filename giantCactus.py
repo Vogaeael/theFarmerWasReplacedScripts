@@ -1,9 +1,11 @@
 import field2
 import handleCactus
+import plantEntity
 
-currentField = field2.giantOnlyField(Entities.Cactus)
+currentField = field2.giantOnlyField(Entities.Cactus, True, False)
 cactusField = field2.getSpecificTypeField(Entities.Cactus, currentField)
 
-handleCactus.replant(cactusField)
 
-handleCactus.handleCactusField(cactusField, True)
+plantEntity.plantField(cactusField)
+
+handleCactus.handleFullCactusField(cactusField, True)

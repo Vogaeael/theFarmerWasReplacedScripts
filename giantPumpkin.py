@@ -3,7 +3,7 @@ import handlePumpkin
 
 clear()
 
-currentField = field2.giantOnlyField(Entities.Pumpkin)
+currentField = field2.giantOnlyField(Entities.Pumpkin, True, False)
 pumpkinField = field2.getSpecificTypeField(Entities.Pumpkin, currentField)
 
-handlePumpkin.handlePumpkinField(pumpkinField)
+handlePumpkin.handleFullPumpkinField(pumpkinField)

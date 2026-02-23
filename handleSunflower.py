@@ -1,4 +1,6 @@
+import field2
 import moveTo
+import plantEntity
 
 def farmIt(sortedField: dict[int, list[int, list[str, Entity]]]) -> None:
     lastHighest = 99
@@ -16,15 +18,7 @@ def farmIt(sortedField: dict[int, list[int, list[str, Entity]]]) -> None:
             moveTo.position(pos["y"], pos["x"])
             harvest()
 
-def replant(sunflowerField: dict[int, list[int, list[str, Entity]]]) -> None:
-    for x in sunflowerField:
-        for y in sunflowerField[x]:
-            moveTo.position(y, x)
-            if get_ground_type() != Grounds.Soil:
-                till()
-            plant(Entities.Sunflower)
-
-def determineFlowerSizes(sunflowerField: dict[int, list[int, list[str, Entity]]]) -> dict[int, dict[str, int]]:
+def determineFlowerSizes(sunflowerField: Any) -> dict[int, dict[str, int]]:        # sunflowerField: field2.FieldList
     sortedField = {}
     for x in sunflowerField:
         for y in sunflowerField[x]:
@@ -37,13 +31,24 @@ def determineFlowerSizes(sunflowerField: dict[int, list[int, list[str, Entity]]]
     return sortedField
 
 
-def handleSunflowerField(sunflowerField: dict[int, list[int, list[str, Entity]]]) -> None:
+def handleSunflowerField(sunflowerField: Any) -> None:     # sunflowerField: field2.FieldList
     # getfield
     sortedField = determineFlowerSizes(sunflowerField)
 
-    # farm the one
+    # farm it in order
     farmIt(sortedField)
     do_a_flip()
 
     # replant all
-    replant(sunflowerField)
+    plantEntity.plantField(sunflowerField)
+
+def handleFullSunflowerField(sunflowerField: Any, alreadyPlanted: bool) -> None:    # sunflowerField: field2.FieldList
+    if not alreadyPlanted:
+        plantEntity.plantField(sunflowerField)
+    
+    # getfield
+    sortedField = determineFlowerSizes(sunflowerField)
+
+    # farm it in order
+    farmIt(sortedField)
+    do_a_flip()

@@ -1,23 +1,15 @@
 import moveTo
+import plantEntity
+import field2
 
-def farmIt(cactusField: dict[int, list[int, list[str, Entity]]]) -> None:
+def farmIt(cactusField: Any) -> None:      # cactusField: field2.FieldList
     for x in cactusField:
         for y in cactusField[x]:
             moveTo.position(y, x)
             harvest()
             return
 
-def replant(cactusField: dict[int, list[int, list[str, Entity]]]) -> None:
-    for x in cactusField:
-        for y in cactusField[x]:
-            moveTo.position(y, x)
-            if get_ground_type() != Grounds.Soil:
-                till()
-            plant(Entities.Cactus)
-
-def sort(
-        cactusField: dict[int, list[int, list[str, Entity]]],
-        falseOrder: bool) -> None:
+def sort(cactusField: Any, falseOrder: bool) -> None:      # cactusField: field2.FieldList
     didSwap = True
     while didSwap:
         didSwap = False
@@ -60,13 +52,8 @@ def sort(
                     if westSize < currentSize and falseOrder:
                         swap(West)
                         didSwap = True
-                    
 
-
-def handleCactusField(
-        cactusField: dict[int, list[int, list[str, Entity]]],
-        falseOrder = False
-        ) -> None:
+def handleCactusField(cactusField: Any, falseOrder = False) -> None:       # cactusField: field2.FieldList
     sort(cactusField, falseOrder)
 
     # farm the one
@@ -74,4 +61,11 @@ def handleCactusField(
     do_a_flip()
 
     # replant all
-    replant(cactusField)
+    plantEntity.plantField(cactusField)
+
+def handleFullCactusField(field: Any, alreadyPlanted: bool, falseOrder = False) -> Entity|None:    # field: field2.FieldList
+    if not alreadyPlanted:
+        plantEntity.plantField(field)
+    sort(field, falseOrder)
+    farmIt(field)
+    do_a_flip()

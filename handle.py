@@ -1,18 +1,16 @@
 import entityGrid
+import field2
+import fullFieldSolution
+import moveTo
+import next
+import plantEntity
 
-def water() -> None:
-    if 0 == get_water():
-        use_item(Items.Water)
-
-def fertilize() -> None:
-    use_item(Items.Fertilizer)
-
-def handle(entity, farmSeparate: bool) -> None:
+def handle(entity: Any, farmSeparate: bool) -> None:     # entity: field2.FieldEntity
     if entity["water"]:
-        water()
+        plantEntity.water()
 
     if entity["fertilize"]:
-        fertilize()
+        plantEntity.fertilize()
 
     # is skipable?
     if entity["entity"] in farmSeparate and farmSeparate[entity["entity"]]:
@@ -20,7 +18,7 @@ def handle(entity, farmSeparate: bool) -> None:
         return
 
     # check costs
-    cost = get_cost(Entities.Cactus)
+    cost = get_cost(entity["entity"])
     for item in cost:
         if num_items(item) < cost[item]:
             nextEntity = entityGrid.items()[item]
@@ -30,7 +28,25 @@ def handle(entity, farmSeparate: bool) -> None:
     if can_harvest() or get_entity_type() == Entities.Dead_Pumpkin:
         harvest()
 
-        neededGroundType = entityGrid.grounds()[entity["entity"]]
+        neededGroundType = entityGrid.getGroundToEntity(entity["entity"])
         if get_ground_type() != neededGroundType:
             till()
         plant(entity["entity"])
+
+def handleCompleteField(field: Any, alreadyPlanted: bool, valuesDict: dict) -> bool:    # field: field2.FieldList
+    if not alreadyPlanted:
+        plantEntity.plantField(field)
+    
+    nextEntity = next.next()
+    nextField = fullFieldSolution.getValues(valuesDict, nextEntity)["field"]
+
+    for x in field:
+        for y in field[x]:
+            moveTo.position(y, x)
+            if can_harvest():
+                harvest()
+            if None != nextField:
+                nextFieldPosition = nextField[x][y]
+                plantEntity.plantEntity(nextFieldPosition["entity"], nextFieldPosition["water"], nextFieldPosition["fertilize"])
+
+    return True

@@ -1,11 +1,30 @@
-def getSpecificTypeField(type: Entity, field: list) -> dict[int, list[int, list[str, Entity]]]:
+import builtins
+
+# The Game can't handle this type of dict, so I will only comment it and use Any as type
+# FieldEntity = dict[
+#     "entity": Entity,
+#     "water": bool,
+#     "fertilize": bool,
+# ]
+# FieldList = dict[
+#     int,
+#     dict[
+#         int,
+#         Any,    # FieldEntity
+#     ],
+# ]
+
+def getSpecificTypeField(type: Entity, field: dict) -> Any:   # field: FieldList) -> FieldList
     typeField = {}
-    for x in range(len(field)):
-        for y in range(len(field[x])):
+    for x in field:
+        for y in field[x]:
             if field[x][y]["entity"] == type:
                 if x not in typeField:
-                    typeField[x] = []
-                typeField[x].append(y)
+                    typeField[x] = {}
+                typeField[x][y] = {}
+                typeField[x][y]["entity"] = type
+                typeField[x][y]["water"] = field[x][y]["water"]
+                typeField[x][y]["fertilize"] = field[x][y]["fertilize"]
     return typeField
 
 def getArrayObjects(
@@ -13,11 +32,11 @@ def getArrayObjects(
         entity: Entity,
         water: bool = False,
         fertilize: bool = False
-        ) -> list[dict[str, Entity|bool]]:
-    array = []
+        ) -> dict[Any]:     # -> list[FieldEntity]
+    objects = {}
     for i in range(num):
-        array.append({"entity": entity, "fertilize": fertilize, "water": water})
-    return array
+        objects[i] = {"entity": entity, "fertilize": fertilize, "water": water}
+    return objects
 
 def getArrayDoubleSwitchObjects(
         num: int,
@@ -27,647 +46,787 @@ def getArrayDoubleSwitchObjects(
         entitySecond: Entity,
         waterSecond: bool,
         fertilizeSecond: bool
-        ) -> list[dict[str, Entity|bool]]:
-    array = []
+        ) -> dict[Any]:     # -> list[FieldEntity]
+    objects = {}
     for i in range(num):
         if i % 2:
-            array.append({"entity": entitySecond, "fertilize": fertilizeSecond, "water": waterSecond})
+            objects[i] = {"entity": entitySecond, "fertilize": fertilizeSecond, "water": waterSecond}
         else:
-            array.append({"entity": entityFirst, "fertilize": fertilizeFirst, "water": waterFirst})
-    return array
+            objects[i] = {"entity": entityFirst, "fertilize": fertilizeFirst, "water": waterFirst}
+    
+    return objects
+
+def mergeDictionaries(dicts: list[dict]) -> dict:
+    newDict = {}
+    i = 0
+    for current in dicts:
+        for j in current:
+            newDict[i] = current[j]
+            i = i + 1
+    
+    return newDict
 
 # get and array of arrays
-def field() -> list[list[dict[str, Entity|bool]]]:
+def field() -> dict[dict[Any]]:     # -> list[list[FieldEntity]]
     fieldSize = get_world_size()
-    array = []
+    objectDict = {}
     if 8 == fieldSize:
         # 1
-        array.append(getArrayObjects(8, Entities.Grass))
+        objectDict[0] = getArrayObjects(8, Entities.Grass)
         # 2
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayDoubleSwitchObjects(6, Entities.Tree, True, False, Entities.Carrot, True, False)
-            + getArrayObjects(1, Entities.Grass))
+        objectDict[1] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayDoubleSwitchObjects(6, Entities.Tree, True, False, Entities.Carrot, True, False),
+                getArrayObjects(1, Entities.Grass)
+            ))
+        )
         # 3
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(4, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[2] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(4, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+            ))
         )
         # 4
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(4, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[3] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(4, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+            ))
         )
         # 5
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(4, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[4] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(4, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 6
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(4, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[5] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(4, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 7
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayDoubleSwitchObjects(6, Entities.Carrot, True, False, Entities.Tree, True, False)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[6] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayDoubleSwitchObjects(6, Entities.Carrot, True, False, Entities.Tree, True, False),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 8
-        array.append(
-            getArrayObjects(8, Entities.Grass)
-        )
-        return array
+        objectDict[7] = getArrayObjects(8, Entities.Grass)
+        
+        return objectDict
     if 12 == fieldSize:
         # 1
-        array.append(getArrayObjects(12, Entities.Grass))
+        objectDict[0] = getArrayObjects(12, Entities.Grass)
         # 2
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(10, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[1] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(10, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 3
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayDoubleSwitchObjects(8, Entities.Tree, True, False, Entities.Grass, False, False)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[2] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayDoubleSwitchObjects(8, Entities.Tree, True, False, Entities.Grass, False, False),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 4
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[3] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 5
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[4] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 6
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[5] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 7
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[6] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 8
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[7] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 9
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[8] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 10
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayDoubleSwitchObjects(8, Entities.Grass, False, False, Entities.Tree, True, False)
-            + getArrayObjects(1, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[9] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayDoubleSwitchObjects(8, Entities.Grass, False, False, Entities.Tree, True, False),
+                getArrayObjects(1, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 11
-        array.append(
-            getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(10, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
+        objectDict[10] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(10, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass)
+            ))
         )
         # 12
-        array.append(
-            getArrayObjects(12, Entities.Grass)
-        )
-        return array
+        objectDict[11] = getArrayObjects(12, Entities.Grass)
+        
+        return objectDict
     if 16 == fieldSize:
         # 1
-        array.append(
-            getArrayObjects(16, Entities.Grass)
-        )
+        objectDict[0] = getArrayObjects(16, Entities.Grass)
         # 2
-        array.append(
-            getArrayObjects(16, Entities.Grass)
-        )
+        objectDict[1] = getArrayObjects(16, Entities.Grass)
         # 3
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(12, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[2] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(12, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 4
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(12, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[3] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(12, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 5
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayDoubleSwitchObjects(8, Entities.Tree, True, False, Entities.Grass, False, False)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[4] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayDoubleSwitchObjects(8, Entities.Tree, True, False, Entities.Grass, False, False),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 6
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[5] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 7
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[6] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 8
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[7] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 9
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[8] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 10
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[9] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 11
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(6, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[10] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(6, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 12
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayDoubleSwitchObjects(8, Entities.Grass, False, False, Entities.Tree, True, False)
-            + getArrayObjects(2, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[11] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayDoubleSwitchObjects(8, Entities.Grass, False, False, Entities.Tree, True, False),
+                getArrayObjects(2, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 13
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(12, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[12] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(12, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 14
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(12, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[13] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(12, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 15
-        array.append(
-            getArrayObjects(16, Entities.Grass)
-        )
+        objectDict[14] = getArrayObjects(16, Entities.Grass)
         # 16
-        array.append(
-            getArrayObjects(16, Entities.Grass)
-        )
-        return array
+        objectDict[15] = getArrayObjects(16, Entities.Grass)
+
+        return objectDict
     if 22 == fieldSize:
         # 1
-        array.append(
-            getArrayObjects(22, Entities.Grass)
-        )
+        objectDict[0] = getArrayObjects(22, Entities.Grass)
         # 2
-        array.append(
-            getArrayObjects(5, Entities.Grass)
-            + getArrayObjects(12, Entities.Sunflower, True)
-            + getArrayObjects(5, Entities.Grass)
+        objectDict[1] = mergeDictionaries(
+            list((
+                getArrayObjects(5, Entities.Grass),
+                getArrayObjects(12, Entities.Sunflower, True),
+                getArrayObjects(5, Entities.Grass)
+            ))
         )
         # 3
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(12, Entities.Sunflower, True)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[2] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(12, Entities.Sunflower, True),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 4
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(18, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[3] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(18, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 5
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(18, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[4] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(18, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 6
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayDoubleSwitchObjects(12, Entities.Tree, True, False, Entities.Grass, False, False)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[5] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayDoubleSwitchObjects(12, Entities.Tree, True, False, Entities.Grass, False, False),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 7
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayDoubleSwitchObjects(12, Entities.Grass, False, False, Entities.Tree, True, False)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[6] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayDoubleSwitchObjects(12, Entities.Grass, False, False, Entities.Tree, True, False),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 8
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(8, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[7] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(8, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 9
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(8, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[8] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(8, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 10
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(8, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[9] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(8, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 11
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(8, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[10] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(8, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 12
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(8, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[11] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(8, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 13
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(8, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[12] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(8, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 14
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(8, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[13] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(8, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 15
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(8, Entities.Pumpkin, True)
-            + getArrayObjects(1, Entities.Grass)
-            + getArrayObjects(1, Entities.Tree, True)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[14] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(8, Entities.Pumpkin, True),
+                getArrayObjects(1, Entities.Grass),
+                getArrayObjects(1, Entities.Tree, True),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 16
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayDoubleSwitchObjects(12, Entities.Tree, True, False, Entities.Grass, False, False)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[15] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayDoubleSwitchObjects(12, Entities.Tree, True, False, Entities.Grass, False, False),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 17
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayDoubleSwitchObjects(12, Entities.Grass, False, False, Entities.Tree, True, False)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[16] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayDoubleSwitchObjects(12, Entities.Grass, False, False, Entities.Tree, True, False),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 18
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(18, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[17] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(18, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 19
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(18, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[18] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(18, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 20
-        array.append(
-            getArrayObjects(2, Entities.Grass)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(12, Entities.Cactus, True)
-            + getArrayObjects(3, Entities.Carrot, True)
-            + getArrayObjects(2, Entities.Grass)
+        objectDict[19] = mergeDictionaries(
+            list((
+                getArrayObjects(2, Entities.Grass),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(12, Entities.Cactus, True),
+                getArrayObjects(3, Entities.Carrot, True),
+                getArrayObjects(2, Entities.Grass)
+            ))
         )
         # 21
-        array.append(
-            getArrayObjects(5, Entities.Grass)
-            + getArrayObjects(12, Entities.Cactus, True)
-            + getArrayObjects(5, Entities.Grass)
+        objectDict[20] = mergeDictionaries(
+            list((
+                getArrayObjects(5, Entities.Grass),
+                getArrayObjects(12, Entities.Cactus, True),
+                getArrayObjects(5, Entities.Grass)
+            ))
         )
         # 22
-        array.append(
-            getArrayObjects(21, Entities.Grass)
-            + getArrayObjects(1, Entities.Grass, False, True)
+        objectDict[21] = mergeDictionaries(
+            list((
+                getArrayObjects(21, Entities.Grass),
+                getArrayObjects(1, Entities.Grass, False, True)
+            ))
         )
-        return array
+
+        return objectDict
     if 32 == fieldSize:
         # 1
-        array.append(
-            getArrayObjects(32, Entities.Grass)
-        )
+        objectDict[0] = getArrayObjects(32, Entities.Grass)
         # 2
-        array.append(
-            getArrayObjects(1, Entities.Grass, False, True)
-            + getArrayObjects(30, Entities.Grass)
-            + getArrayObjects(1, Entities.Grass, False, True)
+        objectDict[1] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass, False, True),
+                getArrayObjects(30, Entities.Grass),
+                getArrayObjects(1, Entities.Grass, False, True)
+            ))
         )
         # 3
-        array.append(
-            getArrayObjects(32, Entities.Grass)
-        )
+        objectDict[2] = getArrayObjects(32, Entities.Grass)
         # 4
-        array.append(
-            getArrayObjects(1, Entities.Grass, False, True)
-            + getArrayObjects(30, Entities.Grass)
-            + getArrayObjects(1, Entities.Grass, False, True)
+        objectDict[3] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass, False, True),
+                getArrayObjects(30, Entities.Grass),
+                getArrayObjects(1, Entities.Grass, False, True)
+            ))
         )
         # 5
-        array.append(
-            getArrayObjects(32, Entities.Grass)
-        )
+        objectDict[4] = getArrayObjects(32, Entities.Grass)
         # 6
-        array.append(
-            getArrayObjects(1, Entities.Grass, False, True)
-            + getArrayObjects(30, Entities.Grass)
-            + getArrayObjects(1, Entities.Grass, False, True)
+        objectDict[5] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Grass, False, True),
+                getArrayObjects(30, Entities.Grass),
+                getArrayObjects(1, Entities.Grass, False, True)
+            ))
         )
         # 7
-        array.append(
-            getArrayObjects(32, Entities.Carrot, True)
-        )
+        objectDict[6] = getArrayObjects(32, Entities.Carrot, True)
         # 8
-        array.append(
-            getArrayObjects(1, Entities.Carrot, True, True)
-            + getArrayObjects(30, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Carrot, True, True)
+        objectDict[7] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Carrot, True, True),
+                getArrayObjects(30, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Carrot, True, True)
+            ))
         )
         # 9
-        array.append(
-            getArrayObjects(32, Entities.Carrot, True)
-        )
+        objectDict[8] = getArrayObjects(32, Entities.Carrot, True)
         # 10
-        array.append(
-            getArrayObjects(1, Entities.Carrot, True, True)
-            + getArrayObjects(30, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Carrot, True, True)
+        objectDict[9] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Carrot, True, True),
+                getArrayObjects(30, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Carrot, True, True)
+            ))
         )
         # 11
-        array.append(
-            getArrayObjects(32, Entities.Carrot, True)
-        )
+        objectDict[10] = getArrayObjects(32, Entities.Carrot, True)
         # 12
-        array.append(
-            getArrayObjects(1, Entities.Carrot, True, True)
-            + getArrayObjects(30, Entities.Carrot, True)
-            + getArrayObjects(1, Entities.Carrot, True, True)
+        objectDict[11] = mergeDictionaries(
+            list((
+                getArrayObjects(1, Entities.Carrot, True, True),
+                getArrayObjects(30, Entities.Carrot, True),
+                getArrayObjects(1, Entities.Carrot, True, True)
+            ))
         )
         # 13
-        array.append(
-            getArrayDoubleSwitchObjects(32, Entities.Tree, True, False, Entities.Grass, False, False)
-        )
+        objectDict[12] = getArrayDoubleSwitchObjects(32, Entities.Tree, True, False, Entities.Grass, False, False)
         # 14
-        array.append(
-            getArrayDoubleSwitchObjects(32, Entities.Grass, False, False, Entities.Tree, True, False)
-        )
+        objectDict[13] = getArrayDoubleSwitchObjects(32, Entities.Grass, False, False, Entities.Tree, True, False)
         # 15
-        array.append(
-            getArrayDoubleSwitchObjects(32, Entities.Tree, True, False, Entities.Grass, False, False)
-        )
+        objectDict[14] = getArrayDoubleSwitchObjects(32, Entities.Tree, True, False, Entities.Grass, False, False)
         # 16
-        array.append(
-            getArrayDoubleSwitchObjects(32, Entities.Grass, False, False, Entities.Tree, True, False)
-        )
+        objectDict[15] = getArrayDoubleSwitchObjects(32, Entities.Grass, False, False, Entities.Tree, True, False)
         # 17
-        array.append(
-            getArrayDoubleSwitchObjects(32, Entities.Tree, True, False, Entities.Carrot, True, False)
-        )
+        objectDict[16] = getArrayDoubleSwitchObjects(32, Entities.Tree, True, False, Entities.Carrot, True, False)
         # 18
-        array.append(
-            getArrayDoubleSwitchObjects(32, Entities.Carrot, True, False, Entities.Tree, True, False)
-        )
+        objectDict[17] = getArrayDoubleSwitchObjects(32, Entities.Carrot, True, False, Entities.Tree, True, False)
         # 19
-        array.append(
-            getArrayDoubleSwitchObjects(32, Entities.Tree, True, False, Entities.Carrot, True, False)
-        )
+        objectDict[18] = getArrayDoubleSwitchObjects(32, Entities.Tree, True, False, Entities.Carrot, True, False)
         # 20
-        array.append(
-            getArrayDoubleSwitchObjects(32, Entities.Carrot, True, False, Entities.Tree, True, False)
-        )
+        objectDict[19] = getArrayDoubleSwitchObjects(32, Entities.Carrot, True, False, Entities.Tree, True, False)
         # 21
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[20] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 22
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[21] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 23
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[22] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 24
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[23] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 25
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[24] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 26
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[25] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 27
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[26] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 28
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[27] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 29
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[28] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 30
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[29] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 31
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[30] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
         # 32
-        array.append(
-            getArrayObjects(12, Entities.Pumpkin, True)
-            + getArrayObjects(10, Entities.Cactus, True)
-            + getArrayObjects(10, Entities.Sunflower, True)
+        objectDict[31] = mergeDictionaries(
+            list((
+                getArrayObjects(12, Entities.Pumpkin, True),
+                getArrayObjects(10, Entities.Cactus, True),
+                getArrayObjects(10, Entities.Sunflower, True)
+            ))
         )
 
-        return array
+        return objectDict
 
-def giantOnlyField(type: Entity) -> list[list[dict[str, Entity|bool]]]:
-    array = []
-    for i in range(32):
-        array.append([])
-        for j in range(32):
-            array[i].append({"entity": type, "fertilize": False, "water": True})
-    return array
+def giantOnlyField(type: Entity, water: bool, fertilize: bool) -> dict[dict[Any]]:        # -> dict[dict[FieldEntity]]
+    object = {}
+    for i in range(get_world_size()):
+        object[i] = getArrayObjects(get_world_size(), type, water, fertilize)
+
+    return object
+
+def giantDoubleSwitchField(
+        mainType: Entity,
+        mainWater: bool,
+        mainFertilize: bool,
+        secondType: Entity,
+        secondWater: bool,
+        secondFertilize: bool
+    ) -> dict[dict[Any]]:        # -> dict[dict[FieldEntity]]
+    objects = {}
+    for i in range(get_world_size()):
+        if i % 2:
+            objects[i] = getArrayDoubleSwitchObjects(
+                get_world_size(),
+                mainType,
+                mainWater,
+                mainFertilize,
+                secondType,
+                secondWater,
+                secondFertilize
+            )
+        else:
+            objects[i] = getArrayDoubleSwitchObjects(
+                get_world_size(),
+                secondType,
+                secondWater,
+                secondFertilize,
+                mainType,
+                mainWater,
+                mainFertilize
+            )
+
+    return objects
