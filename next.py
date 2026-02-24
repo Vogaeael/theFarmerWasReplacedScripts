@@ -8,49 +8,25 @@ def needs(entity: Entity) -> Entity:
             return needs(entityGrid.getEntityToItem(item))
     return entity
 
-def next() -> Entity:
-    entities = {
-        Entities.Grass: {
-            "min": 30000000,    # 30M
-            "item": Items.Hay,
-        },
-        Entities.Tree: {
-            "min": 97700000,    # 97.7M
-            "item": Items.Wood,
-        },
-        Entities.Carrot: {
-            "min": 16400000,    # 16.4M
-            "item": Items.Carrot,
-        },
-        Entities.Pumpkin: {
-            "min": 25900000,    # 25.9M
-            "item": Items.Pumpkin,
-        },
-        Entities.Cactus: {
-            "min": 30000000,    # 30M
-            "item": Items.Cactus,
-        },
-        Entities.Sunflower: {
-            "min": 30000000,    # 30M
-            "item": Items.Power,
-        },
-        Entities.Treasure: {
-            "min": 50000,    # 50K
-            "item": Items.Gold,
-        },
-#        Entities.Dinosaur: {
-#            "min": 100000000,   # 100M
-#            "item": Items.Bone,
-#        },
-        # Suspect ...
+def next() -> Item:
+    items = {
+        Items.Hay: 30000000,    # 30M
+        Items.Wood: 97700000,    # 97.7M
+        Items.Carrot: 16400000,    # 16.4M
+        Items.Pumpkin: 25900000,    # 25.9M
+        Items.Cactus: 30000000,    # 30M
+        Items.Power: 30000000,    # 30M
+        Items.Gold: 50000,    # 50K
+#        Items.Weird_Substance: 5000,    # 5K
+#        Items.Bone: 10000,      # 10K
     }
     i = 1
     while 1 == 1:
-        for entity in entities:
-            if num_items(entities[entity]["item"]) < (entities[entity]["min"] * i):
-                cost = get_cost(entity)
+        for item in items:
+            if num_items(item) < (items[item] * i):
+                cost = get_cost(entityGrid.getEntityToItem(item))
                 for item in cost:
                     if num_items(item) < (cost[item] * 32 * 32 * 2):    # 32 * 32 is the field, 2 because of replanting like pumpkins
-                        return needs(entityGrid.getEntityToItem(item))
-                return entity
+                        return entityGrid.getItemToEntity(needs(entityGrid.getEntityToItem(item)))
+                return item
         i = i + 1

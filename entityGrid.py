@@ -11,6 +11,21 @@ def items() -> dict[Item, Entity]:
         Items.Weird_Substance: Entities.Grass,
     }
 
+def entities() -> dict[Entity, Item]:
+    # Since the next line doesn't work we have to add it hardcoded
+    #return {v: k for k, v in items().items()}
+    return {
+        Entities.Grass: Items.Hay,
+        Entities.Tree: Items.Wood,
+        Entities.Carrot: Items.Carrot,
+        Entities.Pumpkin: Items.Pumpkin,
+        Entities.Cactus: Items.Cactus,
+        Entities.Sunflower: Items.Power,
+        Entities.Dinosaur: Items.Bone,
+        Entities.Treasure: Items.Gold,
+        Entities.Grass: Items.Weird_Substance,
+    }
+
 def grounds() -> dict[Entity, Ground]:
     return {
         Entities.Cactus: Grounds.Soil,
@@ -26,6 +41,11 @@ def getEntityToItem(item: Item) -> Entity:
     itemToEntity = items()
 
     return itemToEntity[item]
+
+def getItemToEntity(entity: Entity) -> Item:
+    entityToItem = entities()
+
+    return entityToItem[entity]
 
 def getGroundToEntity(entity: Entity) -> Ground:
     entityToGround = grounds()
