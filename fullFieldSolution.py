@@ -66,6 +66,10 @@ def getValuesDict() -> dict:
     entityAttributes[Items.Wood]["field"] = field2.giantDoubleSwitchField(Entities.Tree, True, False, Entities.Bush, True, False)
     entityAttributes[Items.Wood]["function"] = runTree
 
+    entityAttributes[Items.Weird_Substance] = {}
+    entityAttributes[Items.Weird_Substance]["field"] = field2.giantOnlyField(Entities.Grass, False, True)
+    entityAttributes[Items.Weird_Substance]["function"] = runGrass
+
     return entityAttributes
 
 def getValues(values: dict, item: Item) -> dict:
