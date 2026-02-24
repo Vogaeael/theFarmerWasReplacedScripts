@@ -17,8 +17,8 @@ def next() -> Item:
         Items.Cactus: 30000000,    # 30M
         Items.Power: 30000000,    # 30M
         Items.Gold: 50000,    # 50K
-#        Items.Weird_Substance: 5000,    # 5K
-#        Items.Bone: 10000,      # 10K
+        Items.Weird_Substance: 5000,    # 5K
+        Items.Bone: 10000,      # 10K
     }
     i = 1
     while 1:

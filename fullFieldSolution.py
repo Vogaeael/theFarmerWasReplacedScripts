@@ -1,6 +1,7 @@
 import field2
 import handle
 import handleCactus
+import handleDinosaur
 import handlePumpkin
 import handleSunflower
 import maze
@@ -34,6 +35,11 @@ def runMaze(_: dict, __: dict, ___: bool) -> bool:
 
 def runTree(valuesDict: dict, values: dict, alreadyPlanted: bool) -> bool:
     return handle.handleCompleteField(values["field"], alreadyPlanted, valuesDict)
+
+def runBone(_: dict, __: dict, ___: bool) -> bool:
+    handleDinosaur.handleDinosaur()
+
+    return False
 
 def getValuesDict() -> dict:
     entityAttributes = {}
@@ -69,6 +75,10 @@ def getValuesDict() -> dict:
     entityAttributes[Items.Weird_Substance] = {}
     entityAttributes[Items.Weird_Substance]["field"] = field2.giantOnlyField(Entities.Grass, False, True)
     entityAttributes[Items.Weird_Substance]["function"] = runGrass
+
+    entityAttributes[Items.Bone] = {}
+    entityAttributes[Items.Bone]["field"] = field2.giantOnlyField(Entities.Grass, False, False)
+    entityAttributes[Items.Bone]["function"] = runBone
 
     return entityAttributes
 
