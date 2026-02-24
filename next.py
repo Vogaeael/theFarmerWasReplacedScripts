@@ -11,7 +11,7 @@ def needs(entity: Entity) -> Entity:
 def next() -> Item:
     items = {
         Items.Hay: 30000000,    # 30M
-        Items.Wood: 97700000,    # 97.7M
+        Items.Wood: 30000000,    # 30M
         Items.Carrot: 16400000,    # 16.4M
         Items.Pumpkin: 25900000,    # 25.9M
         Items.Cactus: 30000000,    # 30M
@@ -21,12 +21,12 @@ def next() -> Item:
 #        Items.Bone: 10000,      # 10K
     }
     i = 1
-    while 1 == 1:
+    while 1:
         for item in items:
             if num_items(item) < (items[item] * i):
                 cost = get_cost(entityGrid.getEntityToItem(item))
-                for item in cost:
-                    if num_items(item) < (cost[item] * 32 * 32 * 2):    # 32 * 32 is the field, 2 because of replanting like pumpkins
-                        return entityGrid.getItemToEntity(needs(entityGrid.getEntityToItem(item)))
+                for costItem in cost:
+                    if num_items(costItem) < (cost[costItem] * 32 * 32 * 2):    # 32 * 32 is the field, 2 because of replanting like pumpkins
+                        return entityGrid.getItemToEntity(needs(entityGrid.getEntityToItem(costItem)))
                 return item
         i = i + 1
