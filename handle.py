@@ -1,6 +1,7 @@
 import entityGrid
 import field2
 import fullFieldSolution
+import hat
 import moveTo
 import next
 import plantEntity
@@ -33,14 +34,27 @@ def handle(entity: Any, farmSeparate: bool) -> None:     # entity: field2.FieldE
             till()
         plant(entity["entity"])
 
+def handleWithSupportDrone() -> None:
+    hat.randomHat()
+    for x in range(get_world_size()):
+        for y in range(get_world_size()):
+            moveTo.position(y, x)
+            entity = get_entity_type()
+            if can_harvest():
+                harvest()
+                default = entityGrid.getDefaultToEntity(entity)
+                plantEntity.plantEntity(entity, default["water"], default["fertilize"])
+
 def handleCompleteField(field: Any, alreadyPlanted: bool, valuesDict: dict) -> bool:    # field: field2.FieldList
-    if not alreadyPlanted:
-        plantEntity.plantField(field)
+    #if not alreadyPlanted:
+    #    plantEntity.plantField(field)
     
     nextEntity = next.next()
     nextField = fullFieldSolution.getValues(valuesDict, nextEntity)["field"]
 
+    i = 0
     for x in field:
+        i = i + 1
         for y in field[x]:
             moveTo.position(y, x)
             if can_harvest():
@@ -48,5 +62,10 @@ def handleCompleteField(field: Any, alreadyPlanted: bool, valuesDict: dict) -> b
             if None != nextField:
                 nextFieldPosition = nextField[x][y]
                 plantEntity.plantEntity(nextFieldPosition["entity"], nextFieldPosition["water"], nextFieldPosition["fertilize"])
+        
+        separator = get_world_size() / max_drones()
+        if i % separator == 0:
+            if max_drones() > num_drones():
+                spawn_drone(handleWithSupportDrone)
 
     return True

@@ -37,6 +37,38 @@ def grounds() -> dict[Entity, Ground]:
         Entities.Sunflower: Grounds.Soil,
     }
 
+def defaults() -> dict[Entity, dict]:
+    return {
+        Entities.Cactus: {
+            "water": True,
+            "fertilize": False,
+        },
+        Entities.Bush: {
+            "water": False,
+            "fertilize": False,
+        },
+        Entities.Tree: {
+            "water": True,
+            "fertilize": False,
+        },
+        Entities.Carrot: {
+            "water": True,
+            "fertilize": False,
+        },
+        Entities.Grass: {
+            "water": False,
+            "fertilize": False,
+        },
+        Entities.Pumpkin: {
+            "water": True,
+            "fertilize": False,
+        },
+        Entities.Sunflower: {
+            "water": True,
+            "fertilize": False,
+        },
+    }
+
 def getEntityToItem(item: Item) -> Entity:
     itemToEntity = items()
 
@@ -51,3 +83,8 @@ def getGroundToEntity(entity: Entity) -> Ground:
     entityToGround = grounds()
 
     return entityToGround[entity]
+
+def getDefaultToEntity(entity: Entity) -> dict:
+    entityDefaults = defaults()
+
+    return entityDefaults[entity]
