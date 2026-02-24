@@ -32,6 +32,7 @@ def replant(pumpkinField: Any, completeField: bool = False) -> Any:    # pumpkin
             if get_ground_type() != Grounds.Soil:
                 till()
             if get_entity_type() != Entities.Pumpkin:
+                harvest()
                 plant(Entities.Pumpkin)
                 plantEntity.water()
                 if x not in newField:
@@ -71,9 +72,9 @@ def handleFullPumpkinField(field: Any, alreadyPlanted: bool) -> None:      # fie
         plantEntity.plantField(field, replantWithSupportDrone)
     
     # check all pumpkins and replant them (until all are not dead and farmable)
-    field = replant(field, True)
-    while (field != {}):
-        field = replant(field, True)
+    restField = replant(field, True)
+    while (restField != {}):
+        restField = replant(field, True)
 
     # farm the one
     farmIt(field)
