@@ -10,15 +10,15 @@ def needs(entity: Entity) -> Entity:
 
 def next() -> Item:
     items = {
-        Items.Hay: 30000000,    # 30M
-        Items.Wood: 30000000,    # 30M
-        Items.Carrot: 65500000,    # 65.5M
-        Items.Pumpkin: 25900000,    # 25.9M
-        Items.Cactus: 30000000,    # 30M
-        Items.Power: 30000000,    # 30M
-        Items.Gold: 50000,    # 50K
-        Items.Weird_Substance: 50000,    # 50K
-        Items.Bone: 100000000,      # 100M
+        Items.Hay: 10 * 1000 * 1000,    # 10M
+        Items.Wood: 100 * 1000 * 1000,    # 100M
+        Items.Carrot: 10 * 1000 * 1000,    # 10M
+        Items.Pumpkin: 25.9 * 1000 * 1000,    # 25.9M
+        Items.Cactus: 10 * 1000 * 1000,    # 10M
+        Items.Power: 10 * 1000 * 1000,    # 10M
+        Items.Gold: 1000 * 1000,    # 1M
+        Items.Weird_Substance: 1000 * 1000,    # 1M
+        Items.Bone: 100 * 1000 * 1000,      # 100M
     }
     i = 1
     while 1:
