@@ -52,6 +52,7 @@ def handleCompleteField(field: Any, alreadyPlanted: bool, valuesDict: dict) -> b
     nextEntity = next.next()
     nextField = fullFieldSolution.getValues(valuesDict, nextEntity)["field"]
 
+    separator = get_world_size() / max_drones()
     i = 0
     for x in field:
         i = i + 1
@@ -63,7 +64,6 @@ def handleCompleteField(field: Any, alreadyPlanted: bool, valuesDict: dict) -> b
                 nextFieldPosition = nextField[x][y]
                 plantEntity.plantEntity(nextFieldPosition["entity"], nextFieldPosition["water"], nextFieldPosition["fertilize"])
         
-        separator = get_world_size() / max_drones()
         if i % separator == 0:
             if max_drones() > num_drones():
                 spawn_drone(handleWithSupportDrone)

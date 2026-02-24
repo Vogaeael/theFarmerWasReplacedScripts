@@ -21,9 +21,16 @@ def plantEntity(entity: Entity, withWater: bool, withFertilizer: bool) -> None:
     if withFertilizer:
         fertilize()
 
-def plantField(field: Any) -> None:        # field: field2.FieldList
+def plantField(field: Any, supportDrone: function = None) -> None:        # field: field2.FieldList
+    i = 0
+    separater = get_world_size() / max_drones()
     for x in field:
+        i = i + 1
         for y in field[x]:
             moveTo.position(y, x)
             position = field[x][y]
             plantEntity(position["entity"], position["water"], position["fertilize"])
+        if None != supportDrone:
+            if i % separater == 0:
+                if max_drones() > num_drones():
+                    spawn_drone(supportDrone)

@@ -1,6 +1,7 @@
+import field2
+import hat
 import moveTo
 import plantEntity
-import field2
 
 def farmIt(cactusField: Any) -> None:      # cactusField: field2.FieldList
     for x in cactusField:
@@ -8,8 +9,48 @@ def farmIt(cactusField: Any) -> None:      # cactusField: field2.FieldList
             moveTo.position(y, x)
             harvest()
             return
+        
+def sortWithSupportDrone(falseOrder: bool) -> None:
+    hat.randomHat()
+    for x in range(get_world_size()):
+        for y in range(get_world_size()):
+            moveTo.position(y, x)
+            if (x + 1) < get_world_size():
+                currentSize = measure()
+                northSize = measure(North)
+                if northSize < currentSize and not falseOrder:
+                    swap(North)
+                elif northSize > currentSize and falseOrder:
+                    swap(North)
+            if (x - 1) >= 0:
+                currentSize = measure()
+                southSize = measure(South)
+                if southSize > currentSize and not falseOrder:
+                    swap(South)
+                elif southSize < currentSize and falseOrder:
+                    swap(South)
+            if (y + 1) < get_world_size():
+                currentSize = measure()
+                eastSize = measure(East)
+                if eastSize < currentSize and not falseOrder:
+                    swap(East)
+                elif eastSize > currentSize and falseOrder:
+                    swap(East)
+            if (y - 1) >= 0:
+                currentSize = measure()
+                westSize = measure(West)
+                if westSize > currentSize and not falseOrder:
+                    swap(West)
+                if westSize < currentSize and falseOrder:
+                    swap(West)
 
-def sort(cactusField: Any, falseOrder: bool) -> None:      # cactusField: field2.FieldList
+def sortWithSupportDroneCorrectOrder() -> None:
+    sortWithSupportDrone(False)
+
+def sortWithSupportDroneFalseOrder() -> None:
+    sortWithSupportDrone(True)
+
+def sort(cactusField: Any, falseOrder: bool, fullfield: bool = True) -> None:      # cactusField: field2.FieldList
     didSwapInField = True
     howManyLinesToSkipAtEnd = 0
     howManyLinesNotSwapAtEnd = 0
@@ -66,10 +107,17 @@ def sort(cactusField: Any, falseOrder: bool) -> None:      # cactusField: field2
                             swap(West)
                             didSwapInField = True
                             howManyLinesNotSwapAtEnd = 0
+            separator = (get_world_size() - howManyLinesToSkipAtEnd) / max_drones()
+            if i % separator == 0:
+                if max_drones() > num_drones():
+                    if falseOrder:
+                        spawn_drone(sortWithSupportDroneFalseOrder)
+                    else:
+                        spawn_drone(sortWithSupportDroneCorrectOrder)
         howManyLinesToSkipAtEnd = howManyLinesToSkipAtEnd + howManyLinesNotSwapAtEnd
 
 def handleCactusField(cactusField: Any, falseOrder = False) -> None:       # cactusField: field2.FieldList
-    sort(cactusField, falseOrder)
+    sort(cactusField, falseOrder, False)
 
     # farm the one
     farmIt(cactusField)
@@ -80,7 +128,10 @@ def handleCactusField(cactusField: Any, falseOrder = False) -> None:       # cac
 
 def handleFullCactusField(field: Any, alreadyPlanted: bool, falseOrder = False) -> Entity|None:    # field: field2.FieldList
     if not alreadyPlanted:
-        plantEntity.plantField(field)
+        supportFunction = sortWithSupportDroneCorrectOrder
+        if falseOrder:
+            supportFunction = sortWithSupportDroneFalseOrder
+        plantEntity.plantField(field, supportFunction)
     sort(field, falseOrder)
     farmIt(field)
     do_a_flip()
