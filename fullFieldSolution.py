@@ -4,6 +4,7 @@ import handleCactus
 import handleDinosaur
 import handlePumpkin
 import handleSunflower
+import hat
 import maze
 import next
 
@@ -87,6 +88,7 @@ def getValues(values: dict, item: Item) -> dict:
     return values[item]
 
 def run() -> None:
+    hat.randomHat()
     itemValueDict = getValuesDict()
     alreadyPlanted = False
     while 1:

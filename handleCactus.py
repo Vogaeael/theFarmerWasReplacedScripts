@@ -108,12 +108,13 @@ def sort(cactusField: Any, falseOrder: bool, fullfield: bool = True) -> None:   
                             didSwapInField = True
                             howManyLinesNotSwapAtEnd = 0
             separator = (get_world_size() - howManyLinesToSkipAtEnd) / max_drones()
-            if i % separator == 0:
-                if max_drones() > num_drones():
-                    if falseOrder:
-                        spawn_drone(sortWithSupportDroneFalseOrder)
-                    else:
-                        spawn_drone(sortWithSupportDroneCorrectOrder)
+            if x != 0:
+                if i % separator == 0:
+                    if max_drones() > num_drones():
+                        if falseOrder:
+                            spawn_drone(sortWithSupportDroneFalseOrder)
+                        else:
+                            spawn_drone(sortWithSupportDroneCorrectOrder)
         howManyLinesToSkipAtEnd = howManyLinesToSkipAtEnd + howManyLinesNotSwapAtEnd
 
 def handleCactusField(cactusField: Any, falseOrder = False) -> None:       # cactusField: field2.FieldList

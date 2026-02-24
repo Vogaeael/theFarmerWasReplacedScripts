@@ -12,13 +12,13 @@ def next() -> Item:
     items = {
         Items.Hay: 30000000,    # 30M
         Items.Wood: 30000000,    # 30M
-        Items.Carrot: 16400000,    # 16.4M
+        Items.Carrot: 65500000,    # 65.5M
         Items.Pumpkin: 25900000,    # 25.9M
         Items.Cactus: 30000000,    # 30M
         Items.Power: 30000000,    # 30M
         Items.Gold: 50000,    # 50K
-        Items.Weird_Substance: 5000,    # 5K
-        Items.Bone: 10000,      # 10K
+        Items.Weird_Substance: 50000,    # 50K
+        Items.Bone: 100000000,      # 100M
     }
     i = 1
     while 1:

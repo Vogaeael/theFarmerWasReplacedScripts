@@ -1,4 +1,5 @@
 import field2
+import hat
 import moveTo
 import plantEntity
 
@@ -10,6 +11,7 @@ def farmIt(pumpkinField: Any) -> None:     # pumpkinField: field2.FieldList
             return
 
 def replantWithSupportDrone() -> None:
+    hat.randomHat()
     for x in range(get_world_size()):
         for y in range(get_world_size()):
             moveTo.position(y, x)
@@ -45,9 +47,10 @@ def replant(pumpkinField: Any, completeField: bool = False) -> Any:    # pumpkin
                 newField[x][y]["entity"] = pumpkinField[x][y]["entity"]
                 newField[x][y]["water"] = pumpkinField[x][y]["water"]
                 newField[x][y]["fertilize"] = pumpkinField[x][y]["fertilize"]
-        if i % separator == 0:
-            if max_drones() > num_drones():
-                spawn_drone(replantWithSupportDrone)
+        if x != 0:
+            if i % separator == 0:
+                if max_drones() > num_drones():
+                    spawn_drone(replantWithSupportDrone)
     return newField
 
 def handlePumpkinField(pumpkinField: Any) -> None:     # pumpkinField: field2.FieldList
