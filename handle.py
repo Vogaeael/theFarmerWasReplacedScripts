@@ -64,9 +64,7 @@ def handleCompleteField(field: Any, alreadyPlanted: bool, valuesDict: dict) -> b
                 nextFieldPosition = nextField[x][y]
                 plantEntity.plantEntity(nextFieldPosition["entity"], nextFieldPosition["water"], nextFieldPosition["fertilize"])
         
-        if x != 0:
-            if i % separator == 0:
-                if max_drones() > num_drones():
-                    spawn_drone(handleWithSupportDrone)
+        if x != 0 and i % separator == 0 and max_drones() > num_drones():
+            spawn_drone(handleWithSupportDrone)
 
     return True

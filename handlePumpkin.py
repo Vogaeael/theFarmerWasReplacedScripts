@@ -48,10 +48,8 @@ def replant(pumpkinField: Any, completeField: bool = False) -> Any:    # pumpkin
                 newField[x][y]["entity"] = pumpkinField[x][y]["entity"]
                 newField[x][y]["water"] = pumpkinField[x][y]["water"]
                 newField[x][y]["fertilize"] = pumpkinField[x][y]["fertilize"]
-        if x != 0:
-            if i % separator == 0:
-                if max_drones() > num_drones():
-                    spawn_drone(replantWithSupportDrone)
+        if x != 0 and i % separator == 0 and max_drones() > num_drones():
+            spawn_drone(replantWithSupportDrone)
     return newField
 
 def handlePumpkinField(pumpkinField: Any) -> None:     # pumpkinField: field2.FieldList
