@@ -20,7 +20,7 @@ def runCarrot(valuesDict: dict, values: dict, alreadyPlanted: bool) -> bool:
 def runGrass(valuesDict: dict, values: dict, alreadyPlanted: bool) -> bool:
     return handle.handleCompleteField(values["field"], alreadyPlanted, valuesDict)
 
-def runPumpkin(_: dict, values: dict, alreadyPlanted: bool) -> bool:
+def runPumpkin(_: dict, __: dict, ___: bool) -> bool:
     handlePumpkinDivided.handleFullPmpkinFieldSeparated()
     #handlePumpkin.handleFullPumpkinField(values["field"], alreadyPlanted)
 

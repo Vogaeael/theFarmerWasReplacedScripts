@@ -44,7 +44,7 @@ def handleSunflowerField(sunflowerField: Any) -> None:     # sunflowerField: fie
 
 def handleFullSunflowerField(sunflowerField: Any, alreadyPlanted: bool) -> None:    # sunflowerField: field2.FieldList
     if not alreadyPlanted:
-        plantEntity.plantField(sunflowerField)
+        plantEntity.plantFullField(Entities.Sunflower, True, False)
     
     # getfield
     sortedField = determineFlowerSizes(sunflowerField)

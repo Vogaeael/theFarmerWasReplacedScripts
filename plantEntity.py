@@ -34,3 +34,20 @@ def plantField(field: Any, supportDrone: function = None) -> None:        # fiel
             if i % separater == 0:
                 if max_drones() > num_drones():
                     spawn_drone(supportDrone)
+
+def plantRow() -> None:
+    entity = get_entity_type()
+    defaults = entityGrid.getDefaultToEntity(entity)
+    for _ in range(get_world_size() - 1):
+        move(East)
+        plantEntity(entity, defaults["water"], defaults["fertilize"])
+
+def plantFullField(entity: Entity, water: bool, fertilize: bool) -> None:
+    for _ in range(get_world_size()):
+        plantEntity(entity, water, fertilize)
+        if num_drones() < max_drones():
+            spawn_drone(plantRow)
+        else:
+            plantRow()
+            move(East)
+        move(North)
