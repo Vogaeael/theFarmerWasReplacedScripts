@@ -5,6 +5,7 @@ def getUnlockedHatList() -> None:
         Hats.Carrot_Hat,
         #Hats.Dinosaur_Hat,
         Hats.Gold_Hat,
+        Hats.Golden_Sunflower_Hat,
         Hats.Gray_Hat,
         Hats.Green_Hat,
         Hats.Pumpkin_Hat,
