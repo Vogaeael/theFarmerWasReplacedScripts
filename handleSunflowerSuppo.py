@@ -49,13 +49,17 @@ def farmIt() -> None:
         14: farm14,
         15: farm15,
     }
+    drones = []
     for currentSize in range(maxSunflowerSize, minSunflowerSize - 1, -1):
         for _ in range(get_world_size()):
             if num_drones() < max_drones():
-                spawn_drone(farmFunctions[currentSize])
+                drones.append(spawn_drone(farmFunctions[currentSize]))
             else:
                 farmRow(currentSize)
             move(North)
+        for drone in drones:
+            if not has_finished(drone):
+                wait_for(drone)
 
 
 def handleFullSunflowerField(alreadyPlanted: bool) -> None:
