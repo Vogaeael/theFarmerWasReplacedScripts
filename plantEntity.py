@@ -3,7 +3,7 @@ import field2
 import moveTo
 
 def water() -> None:
-    if 0 == get_water():
+    while 0.9 > get_water():
         use_item(Items.Water)
 
 def fertilize() -> None:
