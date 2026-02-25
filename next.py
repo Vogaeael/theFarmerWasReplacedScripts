@@ -13,9 +13,9 @@ def next() -> Item:
         Items.Hay: 10 * 1000 * 1000,    # 10M
         Items.Wood: 100 * 1000 * 1000,    # 100M
         Items.Carrot: 10 * 1000 * 1000,    # 10M
-        Items.Pumpkin: 25.9 * 1000 * 1000,    # 25.9M
+        Items.Pumpkin: 10 * 1000 * 1000,    # 10M
         Items.Cactus: 10 * 1000 * 1000,    # 10M
-        Items.Power: 10 * 1000 * 1000,    # 10M
+        Items.Power: 1000 * 1000 * 1000,    # 1B
         Items.Gold: 1000 * 1000,    # 1M
         Items.Weird_Substance: 1000 * 1000,    # 1M
         Items.Bone: 100 * 1000 * 1000,      # 100M

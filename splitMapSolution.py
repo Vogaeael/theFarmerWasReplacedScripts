@@ -23,7 +23,7 @@ def run() -> None:
     }
     moveTo.start()
 
-    while 1:
+    while True:
         hat.randomHat()
         
         for _ in range(get_world_size()):

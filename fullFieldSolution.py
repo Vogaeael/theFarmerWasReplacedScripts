@@ -91,7 +91,7 @@ def run() -> None:
     hat.randomHat()
     itemValueDict = getValuesDict()
     alreadyPlanted = False
-    while 1:
+    while True:
         nextItem = next.next()
         if not alreadyPlanted:
             clear()
