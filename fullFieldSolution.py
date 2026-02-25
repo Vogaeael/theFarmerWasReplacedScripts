@@ -5,6 +5,7 @@ import handleDinosaur
 import handlePumpkin
 import handlePumpkinDivided
 import handleSunflower
+import handleSunflowerSuppo
 import hat
 import maze
 import next
@@ -27,7 +28,8 @@ def runPumpkin(_: dict, __: dict, ___: bool) -> bool:
     return False
 
 def runSunflower(_: dict, values: dict, alreadyPlanted: bool) -> bool:
-    handleSunflower.handleFullSunflowerField(values["field"], alreadyPlanted)
+    handleSunflowerSuppo.handleFullSunflowerField(alreadyPlanted)
+    #handleSunflower.handleFullSunflowerField(values["field"], alreadyPlanted)
 
     return False
 

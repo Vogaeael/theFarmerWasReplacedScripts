@@ -1,5 +1,6 @@
 import entityGrid
 import field2
+import hat
 import moveTo
 
 def water() -> None:
@@ -36,18 +37,24 @@ def plantField(field: Any, supportDrone: function = None) -> None:        # fiel
                     spawn_drone(supportDrone)
 
 def plantRow() -> None:
+    hat.randomHat()
     entity = get_entity_type()
     defaults = entityGrid.getDefaultToEntity(entity)
     for _ in range(get_world_size() - 1):
         move(East)
         plantEntity(entity, defaults["water"], defaults["fertilize"])
 
-def plantFullField(entity: Entity, water: bool, fertilize: bool) -> None:
+def plantFullField(entity: Entity, water: bool, fertilize: bool, wait: bool = False) -> None:
+    drones = []
     for _ in range(get_world_size()):
         plantEntity(entity, water, fertilize)
         if num_drones() < max_drones():
-            spawn_drone(plantRow)
+            drones.append(spawn_drone(plantRow))
         else:
             plantRow()
             move(East)
         move(North)
+    
+    for drone in drones:
+        if not has_finished(drone):
+            wait_for(drone)
